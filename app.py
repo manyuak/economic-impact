@@ -67,7 +67,7 @@ def index():
             })
         except Exception as e:
             return jsonify({'error': str(e)})
-    return render_template('index.html')
+    return send_file('index.html')
 
 if __name__ == '__main__':
     app.run(debug=True)
