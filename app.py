@@ -4,7 +4,7 @@ import io
 import base64
 import numpy as np
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder=".")
 
 def generate_plot(initial_gdp, costs, benefits, cybercrime_loss, investment, reduction):
     reduced_loss = cybercrime_loss * (reduction / 100)
@@ -67,7 +67,7 @@ def index():
             })
         except Exception as e:
             return jsonify({'error': str(e)})
-    return send_file('index.html')
+    return render_template('index.html')
 
 if __name__ == '__main__':
     app.run(debug=True)
