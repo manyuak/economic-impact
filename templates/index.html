@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Economic Impact of Cybercrimes</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+
+    <!-- Header -->
+    <header>
+        <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo">
+        <h1>Economic Impact of Cybercrimes</h1>
+    </header>
+
+    <!-- Canva Slide -->
+    <div class="canva-container">
+        <iframe loading="lazy" src="https://www.canva.com/design/DAGdr9GbGtY/5T9nVbCqJRU9afbuDjUvNw/view?embed" allowfullscreen></iframe>
+    </div>
+    <a class="canva-link" href="https://www.canva.com/design/DAGdr9GbGtY/5T9nVbCqJRU9afbuDjUvNw/view?utm_content=DAGdr9GbGtY&utm_campaign=designshare&utm_medium=embeds&utm_source=link" target="_blank">
+        Economic Impact of Cybercrimes on Industries
+    </a>
+
+    <!-- Input Form -->
+    <div class="form-container">
+        <h2>Enter Economic Data</h2>
+        <form id="economic-form">
+            <div class="form-row">
+                <div class="form-column">
+                    <label for="initial_gdp">Initial GDP ($):</label>
+                    <input type="number" id="initial_gdp" required>
+    
+                    <label for="costs">Costs ($):</label>
+                    <input type="number" id="costs" required>
+    
+                    <label for="benefits">Benefits ($):</label>
+                    <input type="number" id="benefits" required>
+                </div>
+    
+                <div class="form-column">
+                    <label for="cybercrime_loss">Cybercrime Loss ($):</label>
+                    <input type="number" id="cybercrime_loss" required>
+    
+                    <label for="investment">Investment in Mitigation ($):</label>
+                    <input type="number" id="investment" required>
+    
+                    <label for="reduction">Reduction Percentage (%):</label>
+                    <input type="number" id="reduction" required>
+                </div>
+            </div>
+    
+            <button type="submit">Calculate</button>
+        </form>
+    </div>
+    
+    <!-- Results Section -->
+    <div class="results-container" id="results-section" style="display: none;">
+        <h2>Results</h2>
+        <p><strong>Net Benefit:</strong> <span id="net_benefit"></span></p>
+        <p><strong>Final GDP:</strong> <span id="final_gdp"></span></p>
+        <p><strong>Effective Cybercrime Loss:</strong> <span id="effective_loss"></span></p>
+        <p><strong>Reduced Loss:</strong> <span id="reduced_loss"></span></p>
+    </div>
+
+    <!-- Graphs -->
+    <div class="graphs-container" id="graphs-section" style="display: none;">
+        <h2>Economic Impact Analysis</h2>
+        <div class="graphs-row">
+            <img id="bar_chart" src="" alt="Economic Impact Breakdown">
+            <img id="gdp_trend_chart" src="" alt="GDP Trend Over Time">
+        </div>
+    </div>
+
+    <!-- Team Members Section -->
+    <div class="team-container">
+        <h2>Team Members</h2>
+        <div class="team-grid">
+            <div class="team-member">Manu Prakash Bhat</div>
+            <div class="team-member">Manyu A K</div>
+            <div class="team-member">Pramukh K</div>
+            <div class="team-member">Saran Karthik</div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>Principles of Management and Economics</p>
+        <p>Department of Information Science and Engineering</p>
+    </footer>
+
+    <script>
+        document.getElementById("economic-form").addEventListener("submit", function(event) {
+            event.preventDefault();
+
+            const data = {
+                initial_gdp: document.getElementById("initial_gdp").value,
+                costs: document.getElementById("costs").value,
+                benefits: document.getElementById("benefits").value,
+                cybercrime_loss: document.getElementById("cybercrime_loss").value,
+                investment: document.getElementById("investment").value,
+                reduction: document.getElementById("reduction").value
+            };
+
+            fetch("/", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(result => {
+                document.getElementById("net_benefit").innerText = `$${result.net_benefit.toFixed(2)}`;
+                document.getElementById("final_gdp").innerText = `$${result.final_gdp.toFixed(2)}`;
+                document.getElementById("effective_loss").innerText = `$${result.effective_loss.toFixed(2)}`;
+                document.getElementById("reduced_loss").innerText = `$${result.reduced_loss.toFixed(2)}`;
+                document.getElementById("bar_chart").src = "data:image/png;base64," + result.bar_chart;
+                document.getElementById("gdp_trend_chart").src = "data:image/png;base64," + result.gdp_trend_chart;
+
+                document.getElementById("results-section").style.display = "block";
+                document.getElementById("graphs-section").style.display = "block";
+            })
+            .catch(error => console.error("Error:", error));
+        });
+    </script>
+
+</body>
+</html>
